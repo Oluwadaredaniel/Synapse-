@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { useApp } from '../store/AppContext';
+import { usePwa } from '../hooks/usePwa';
 import { 
   Flame, ArrowRight, Upload, PlayCircle, Zap, Trophy, Target, 
   Sparkles, Plus, Share2, X, Check, Download, Instagram, Facebook, 
@@ -15,6 +16,7 @@ interface DashboardProps {
 
 const Dashboard: React.FC<DashboardProps> = ({ navigate }) => {
   const { user, lessons } = useApp();
+  const { supportsPWA, installPwa, isStandalone } = usePwa();
   const [showStreakCard, setShowStreakCard] = useState(false);
   
   // Share Sheet States
@@ -42,29 +44,20 @@ const Dashboard: React.FC<DashboardProps> = ({ navigate }) => {
   const todayIndex = new Date().getDay() === 0 ? 6 : new Date().getDay() - 1; 
 
   // --- SHARE LOGIC ---
-  
   const handleCaptureAndShare = async () => {
     if (!cardRef.current) return;
-    
     setIsCapturing(true);
-    
     try {
-      // 1. Capture the card
-      // We set backgroundColor to null to respect transparency, but ensure the parent div has the color
       const canvas = await html2canvas(cardRef.current, {
-        scale: 3, // Higher res for clear sharing
+        scale: 3, 
         backgroundColor: null, 
-        useCORS: true, // Allow cross-origin images
+        useCORS: true, 
         logging: false,
       });
-      
       const image = canvas.toDataURL('image/png');
       setCapturedImage(image);
-      
-      // 2. Open Share Sheet
       setShowShareSheet(true);
-      setShowStreakCard(false); // Close the original card modal to focus on share sheet
-      
+      setShowStreakCard(false); 
     } catch (err) {
       console.error("Capture failed:", err);
       alert("Failed to create image. Please try taking a screenshot manually.");
@@ -75,11 +68,9 @@ const Dashboard: React.FC<DashboardProps> = ({ navigate }) => {
 
   const handleNativeShare = async () => {
     if (!capturedImage) return;
-    
     try {
       const blob = await (await fetch(capturedImage)).blob();
       const file = new File([blob], 'synapse-streak.png', { type: 'image/png' });
-      
       if (navigator.canShare && navigator.canShare({ files: [file] })) {
         await navigator.share({
           title: `I'm on a ${user.streak} day streak on Synapse!`,
@@ -125,7 +116,7 @@ const Dashboard: React.FC<DashboardProps> = ({ navigate }) => {
           </h1>
         </div>
         
-        {/* Streak Badge (Clickable for Card) */}
+        {/* Streak Badge */}
         <div 
           onClick={() => setShowStreakCard(true)}
           className="cursor-pointer group flex items-center gap-4 bg-surface-100 p-2 pr-6 rounded-full border border-white/5 shadow-2xl hover:bg-surface-200 transition-all active:scale-95"
@@ -139,6 +130,28 @@ const Dashboard: React.FC<DashboardProps> = ({ navigate }) => {
            </div>
         </div>
       </header>
+
+      {/* --- PWA PROMO CARD (If Web) --- */}
+      {supportsPWA && !isStandalone && (
+         <div className="bg-gradient-to-r from-primary-900/30 to-blue-900/30 border border-primary-500/30 rounded-3xl p-6 flex flex-col md:flex-row items-center justify-between gap-6 relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-primary-500/10 rounded-full blur-[60px] pointer-events-none"></div>
+            <div className="flex items-center gap-4 relative z-10">
+               <div className="w-14 h-14 bg-black/50 rounded-2xl flex items-center justify-center border border-white/10">
+                  <Smartphone size={28} className="text-white" />
+               </div>
+               <div>
+                  <h3 className="text-lg font-bold text-white">Upgrade to Synapse App</h3>
+                  <p className="text-sm text-gray-300">Get offline access, haptics, and smoother performance.</p>
+               </div>
+            </div>
+            <button 
+               onClick={installPwa}
+               className="px-6 py-3 bg-white text-black font-black text-sm rounded-xl hover:scale-105 transition-transform shadow-lg whitespace-nowrap relative z-10"
+            >
+               Install App
+            </button>
+         </div>
+      )}
 
       {/* --- Main Stats Grid --- */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -221,6 +234,7 @@ const Dashboard: React.FC<DashboardProps> = ({ navigate }) => {
          </button>
       </div>
 
+      {/* ... (Recent Operations list kept same as before) ... */}
       <div className="space-y-4">
          <div className="flex justify-between items-end">
             <h2 className="text-2xl font-bold text-white flex items-center gap-2">
@@ -266,15 +280,13 @@ const Dashboard: React.FC<DashboardProps> = ({ navigate }) => {
          )}
       </div>
 
-      {/* --- STREAK CARD MODAL (Pre-Capture) --- */}
+      {/* --- STREAK CARD MODAL (Kept same as before) --- */}
       {showStreakCard && (
          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/90 backdrop-blur-xl animate-fade-in" onClick={() => setShowStreakCard(false)}>
              <div className="relative w-full max-w-sm" onClick={e => e.stopPropagation()}>
                  <button onClick={() => setShowStreakCard(false)} className="absolute -top-12 right-0 p-2 text-white/50 hover:text-white"><X size={24}/></button>
                  
-                 {/* 
-                     CAPTURE AREA: The content to be turned into an image.
-                 */}
+                 {/* CAPTURE AREA */}
                  <div ref={cardRef} className="relative bg-orange-600 rounded-[2.5rem] p-1 shadow-2xl overflow-hidden transform transition-all duration-300">
                      <div className="bg-[#121212] rounded-[2.4rem] overflow-hidden flex flex-col h-[550px] relative">
                         {/* Top Gradient */}
@@ -331,7 +343,6 @@ const Dashboard: React.FC<DashboardProps> = ({ navigate }) => {
                      </div>
                  </div>
 
-                 {/* Action Buttons (Visible only on UI) */}
                  <div className="flex gap-3 mt-6">
                      <button 
                        onClick={handleCaptureAndShare} 
@@ -346,24 +357,16 @@ const Dashboard: React.FC<DashboardProps> = ({ navigate }) => {
          </div>
       )}
 
-      {/* --- NATIVE-STYLE SHARE SHEET POPUP --- */}
+      {/* SHARE SHEET (Kept same as before) */}
       {showShareSheet && capturedImage && (
          <div className="fixed inset-0 z-[110] flex items-end md:items-center justify-center bg-black/80 backdrop-blur-md animate-fade-in" onClick={() => setShowShareSheet(false)}>
             <div className="bg-[#1c1c1e] w-full max-w-md rounded-t-3xl md:rounded-3xl p-6 shadow-2xl animate-slide-up border border-white/10" onClick={e => e.stopPropagation()}>
-                
-                {/* Drag Handle */}
                 <div className="w-12 h-1 bg-gray-600 rounded-full mx-auto mb-6 opacity-50"></div>
-                
                 <h3 className="text-xl font-bold text-white mb-6 text-center">Share Achievement</h3>
-                
-                {/* Preview */}
                 <div className="mb-8 flex justify-center">
                     <img src={capturedImage} alt="Streak Card" className="w-48 rounded-xl shadow-lg border border-white/10 transform rotate-2" />
                 </div>
-
-                {/* Share Grid */}
                 <div className="grid grid-cols-4 gap-4 mb-6">
-                   {/* WhatsApp */}
                    <a 
                      href={`https://wa.me/?text=${encodeURIComponent(shareText)}`} 
                      target="_blank" rel="noreferrer"
@@ -374,8 +377,6 @@ const Dashboard: React.FC<DashboardProps> = ({ navigate }) => {
                       </div>
                       <span className="text-xs text-gray-400">WhatsApp</span>
                    </a>
-
-                   {/* Twitter */}
                    <a 
                      href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`} 
                      target="_blank" rel="noreferrer"
@@ -386,8 +387,6 @@ const Dashboard: React.FC<DashboardProps> = ({ navigate }) => {
                       </div>
                       <span className="text-xs text-gray-400">X</span>
                    </a>
-
-                   {/* Facebook */}
                    <a 
                      href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent('https://synapse.edu')}`} 
                      target="_blank" rel="noreferrer"
@@ -398,8 +397,6 @@ const Dashboard: React.FC<DashboardProps> = ({ navigate }) => {
                       </div>
                       <span className="text-xs text-gray-400">Facebook</span>
                    </a>
-
-                    {/* Instagram (Download Helper) */}
                     <button 
                      onClick={() => {
                         handleDownload();
@@ -413,8 +410,6 @@ const Dashboard: React.FC<DashboardProps> = ({ navigate }) => {
                       <span className="text-xs text-gray-400">Instagram</span>
                    </button>
                 </div>
-
-                {/* Secondary Actions */}
                 <div className="space-y-3">
                    <button 
                      onClick={handleNativeShare}
@@ -422,7 +417,6 @@ const Dashboard: React.FC<DashboardProps> = ({ navigate }) => {
                    >
                       <Smartphone size={20} /> Share via System
                    </button>
-
                    <button 
                      onClick={handleDownload}
                      className="w-full py-3.5 bg-white text-black rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-gray-200 transition-colors"
@@ -430,7 +424,6 @@ const Dashboard: React.FC<DashboardProps> = ({ navigate }) => {
                       <Download size={20} /> Save Image
                    </button>
                 </div>
-
                 <button onClick={() => setShowShareSheet(false)} className="mt-6 w-full py-3 text-gray-500 font-bold hover:text-white">
                    Close
                 </button>

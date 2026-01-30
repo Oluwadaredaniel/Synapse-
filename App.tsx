@@ -7,14 +7,15 @@ import { Loader2, Menu } from 'lucide-react';
 // Components
 import Sidebar from './components/Sidebar';
 import BottomNav from './components/BottomNav';
+import InstallBanner from './components/InstallBanner'; // Added
 
 // Pages
 import Landing from './pages/Landing';
 import PwaLanding from './pages/PwaLanding';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
-import ForgotPassword from './pages/ForgotPassword'; // Added
-import ResetPassword from './pages/ResetPassword'; // Added
+import ForgotPassword from './pages/ForgotPassword';
+import ResetPassword from './pages/ResetPassword';
 import Dashboard from './pages/Dashboard';
 import Upload from './pages/Upload';
 import Learning from './pages/Learning';
@@ -173,6 +174,9 @@ const AppContent: React.FC = () => {
   return (
     <div className="min-h-screen bg-background text-gray-100 font-sans selection:bg-primary-500/30">
       
+      {/* Install Banner - Only shows on web if PWA supported */}
+      <InstallBanner />
+
       {/* Mobile Sidebar Trigger (Hamburger) */}
       {!isAuthRoute && !isAdminRoute && !isFocusMode && (
          <div className="md:hidden fixed top-0 left-0 right-0 p-4 z-40 pointer-events-none">

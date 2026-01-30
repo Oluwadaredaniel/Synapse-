@@ -4,8 +4,7 @@ import {
   ArrowRight, Download, Brain, Menu, X, 
   Sparkles, Zap, Activity, Layers, 
   Star, Check, Trophy, Flame, BookOpen, 
-  Gamepad2, GraduationCap, Timer, Heart, Repeat,
-  CheckCircle2, XCircle, Smartphone, User
+  Gamepad2, Smartphone, CheckCircle2, WifiOff, Bell
 } from 'lucide-react';
 
 // --- INTERSECTION OBSERVER COMPONENT ---
@@ -112,7 +111,7 @@ const Landing: React.FC<LandingProps> = ({ navigate, installPwa, supportsPWA }) 
             </div>
             
             <div className="hidden md:flex items-center gap-8">
-               {['How it Works', 'Leagues', 'Engine', 'Reviews'].map((item) => (
+               {['How it Works', 'App', 'Leagues', 'Engine'].map((item) => (
                  <a key={item} href={`#${item.toLowerCase().replace(/\s/g, '-')}`} className="text-sm font-bold text-gray-400 hover:text-white transition-colors relative group">
                    {item}
                    <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary-500 transition-all group-hover:w-full"></span>
@@ -133,6 +132,11 @@ const Landing: React.FC<LandingProps> = ({ navigate, installPwa, supportsPWA }) 
         {isMenuOpen && (
           <div className="absolute top-full left-0 right-0 bg-black/95 backdrop-blur-xl border-b border-white/10 p-6 flex flex-col gap-6 md:hidden animate-fade-in z-50">
             <button onClick={() => navigate(AppRoute.LOGIN)} className="text-lg font-bold text-gray-300 text-left py-2 border-b border-white/5">Log in</button>
+            {supportsPWA && (
+               <button onClick={() => { installPwa(); setIsMenuOpen(false); }} className="text-lg font-bold text-primary-400 text-left py-2 border-b border-white/5 flex items-center gap-2">
+                  <Download size={18} /> Install App
+               </button>
+            )}
             <button onClick={() => navigate(AppRoute.SIGNUP)} className="w-full py-4 bg-primary-600 text-white font-black rounded-xl shadow-lg">Start Free</button>
           </div>
         )}
@@ -174,10 +178,10 @@ const Landing: React.FC<LandingProps> = ({ navigate, installPwa, supportsPWA }) 
             {supportsPWA && (
                <button 
                   onClick={installPwa} 
-                  className="px-8 py-5 bg-surface-100 hover:bg-surface-200 border-b-4 border-surface-300 text-white rounded-2xl font-bold text-lg transition-all w-full sm:w-auto flex items-center justify-center gap-2 active:border-b-0 active:translate-y-1"
+                  className="px-8 py-5 bg-surface-100 hover:bg-surface-200 border border-white/10 text-white rounded-2xl font-bold text-lg transition-all w-full sm:w-auto flex items-center justify-center gap-2 active:scale-95 group"
                >
-                  <Download size={20} className="text-gray-400" />
-                  Get App
+                  <Download size={20} className="text-gray-400 group-hover:text-primary-400 transition-colors" />
+                  Install App
                </button>
             )}
          </ScrollReveal>
@@ -194,7 +198,7 @@ const Landing: React.FC<LandingProps> = ({ navigate, installPwa, supportsPWA }) 
             style={{ transform: `translate(var(--mouse-move-x), var(--mouse-move-y))` }}
          >
              <ScrollReveal delay={600} className="relative z-10 rounded-3xl border-4 border-gray-800 bg-[#0a0a0a] shadow-2xl shadow-primary-900/20 overflow-hidden transform rotate-x-6 hover:rotate-x-0 transition-transform duration-1000 mx-auto max-w-4xl h-[500px] flex flex-col md:flex-row">
-                
+                {/* ... (Mockup content from previous version) ... */}
                 {/* Sidebar (Fake) */}
                 <div className="hidden md:flex flex-col w-20 border-r border-white/5 items-center py-8 gap-8 bg-black">
                    <div className="w-10 h-10 rounded-xl bg-primary-500/20 text-primary-500 flex items-center justify-center"><BookOpen size={20}/></div>
@@ -244,24 +248,22 @@ const Landing: React.FC<LandingProps> = ({ navigate, installPwa, supportsPWA }) 
                    </div>
 
                 </div>
-
              </ScrollReveal>
              
-             {/* Decorative Elements around Mockup */}
+             {/* Decorative Elements */}
              <div className="absolute -right-12 top-20 w-24 h-24 bg-primary-500 rounded-2xl rotate-12 blur-2xl opacity-20 animate-pulse"></div>
              <div className="absolute -left-12 bottom-20 w-32 h-32 bg-emerald-500 rounded-full blur-3xl opacity-20 animate-pulse"></div>
          </div>
       </section>
 
-      {/* --- SUBJECT MARQUEE (Infinite Scroll) --- */}
+      {/* --- SUBJECT MARQUEE --- */}
       <section className="py-12 bg-surface-50 border-y border-white/5 overflow-hidden">
          <div className="flex w-[200%] animate-marquee hover:[animation-play-state:paused]">
             {[...Array(2)].map((_, i) => (
                <div key={i} className="flex gap-12 px-6 items-center">
                   {[
                      "Computer Science", "Law", "Medicine", "History", "Psychology", 
-                     "Physics", "Economics", "Literature", "Chemistry", "Art History",
-                     "Philosophy", "Engineering", "Marketing", "Political Science"
+                     "Physics", "Economics", "Literature", "Chemistry", "Art History"
                   ].map((subject, j) => (
                      <div key={j} className="flex items-center gap-3 opacity-50 hover:opacity-100 transition-opacity cursor-default whitespace-nowrap">
                         <div className="w-2 h-2 rounded-full bg-primary-500"></div>
@@ -273,13 +275,13 @@ const Landing: React.FC<LandingProps> = ({ navigate, installPwa, supportsPWA }) 
          </div>
       </section>
 
-      {/* --- MOBILE MOCKUP SECTION --- */}
-      <section className="py-32 px-6 bg-black relative overflow-hidden">
+      {/* --- MOBILE APP FEATURE SECTION (Enhanced) --- */}
+      <section id="app" className="py-32 px-6 bg-black relative overflow-hidden">
          <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-16 items-center">
             
             <ScrollReveal className="order-2 md:order-1 relative flex justify-center">
                {/* Mobile Phone Mockup */}
-               <div className="relative w-[300px] h-[600px] bg-black rounded-[3rem] border-8 border-gray-800 shadow-2xl overflow-hidden z-10">
+               <div className="relative w-[300px] h-[600px] bg-black rounded-[3rem] border-8 border-gray-800 shadow-2xl overflow-hidden z-10 shadow-primary-900/40">
                   <div className="absolute top-0 inset-x-0 h-8 bg-black z-20 rounded-b-xl w-40 mx-auto"></div>
                   
                   {/* Screen Content */}
@@ -314,13 +316,6 @@ const Landing: React.FC<LandingProps> = ({ navigate, installPwa, supportsPWA }) 
                              </div>
                           </div>
                       </div>
-
-                      {/* Fake Bottom Nav */}
-                      <div className="mt-auto h-20 bg-surface-100 border-t border-white/5 flex justify-around items-center px-4">
-                         <div className="text-primary-500"><Gamepad2 size={24}/></div>
-                         <div className="text-gray-600"><Layers size={24}/></div>
-                         <div className="text-gray-600"><User size={24}/></div>
-                      </div>
                   </div>
                </div>
 
@@ -329,171 +324,43 @@ const Landing: React.FC<LandingProps> = ({ navigate, installPwa, supportsPWA }) 
             </ScrollReveal>
 
             <ScrollReveal delay={200} className="order-1 md:order-2 space-y-8">
-               <div className="inline-block px-4 py-2 rounded-full bg-surface-100 border border-white/10 text-xs font-bold uppercase tracking-wider text-gray-400 mb-4">
-                  <Smartphone size={14} className="inline mr-2 -mt-0.5" /> Mobile Optimized
+               <div className="inline-block px-4 py-2 rounded-full bg-surface-100 border border-white/10 text-xs font-bold uppercase tracking-wider text-primary-400 mb-4 shadow-glow">
+                  <Smartphone size={14} className="inline mr-2 -mt-0.5" /> Mobile Experience
                </div>
                <h2 className="text-4xl md:text-6xl font-black text-white leading-tight">
-                  Learn anywhere.<br/>
-                  <span className="text-primary-500">Conquer everywhere.</span>
+                  Not just a website.<br/>
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-emerald-500">A Native Powerhouse.</span>
                </h2>
                <p className="text-xl text-gray-400 leading-relaxed">
-                  Synapse feels like a native app. Install it on your home screen to keep your streak alive during your commute, coffee break, or boring lectures.
+                  Install Synapse to your home screen for a premium, fullscreen experience. No app store clutter—just pure focus.
                </p>
-               <div className="flex gap-4 pt-4">
-                   <div className="flex flex-col items-center gap-2">
-                       <div className="w-12 h-12 rounded-xl bg-surface-100 border border-white/10 flex items-center justify-center text-white font-bold text-lg">PWA</div>
-                       <span className="text-xs text-gray-500 font-bold uppercase">Installable</span>
+               
+               <div className="grid grid-cols-1 gap-4 pt-4">
+                   <div className="flex items-center gap-4 bg-surface-100 p-4 rounded-2xl border border-white/5">
+                       <div className="w-12 h-12 rounded-xl bg-black flex items-center justify-center text-white"><WifiOff size={24}/></div>
+                       <div>
+                          <h4 className="font-bold text-white">Offline Capability</h4>
+                          <p className="text-xs text-gray-500">Study on the subway or in dead zones.</p>
+                       </div>
                    </div>
-                   <div className="flex flex-col items-center gap-2">
-                       <div className="w-12 h-12 rounded-xl bg-surface-100 border border-white/10 flex items-center justify-center text-white font-bold text-lg">OFF</div>
-                       <span className="text-xs text-gray-500 font-bold uppercase">Offline Mode</span>
+                   <div className="flex items-center gap-4 bg-surface-100 p-4 rounded-2xl border border-white/5">
+                       <div className="w-12 h-12 rounded-xl bg-black flex items-center justify-center text-white"><Bell size={24}/></div>
+                       <div>
+                          <h4 className="font-bold text-white">Smart Notifications</h4>
+                          <p className="text-xs text-gray-500">Get reminders to keep your streak alive.</p>
+                       </div>
                    </div>
                </div>
+
+               {supportsPWA && (
+                 <button 
+                    onClick={installPwa}
+                    className="w-full md:w-auto px-8 py-4 bg-white text-black font-black rounded-xl shadow-lg hover:scale-105 transition-transform flex items-center justify-center gap-2"
+                 >
+                    <Download size={20} /> Install App Now
+                 </button>
+               )}
             </ScrollReveal>
-         </div>
-      </section>
-
-      {/* --- COMPARISON SECTION (Old vs New) --- */}
-      <section id="how-it-works" className="py-32 px-6 bg-surface-50 relative">
-         <div className="max-w-7xl mx-auto">
-            <ScrollReveal>
-               <h2 className="text-4xl md:text-6xl font-black text-center mb-20">
-                  Stop Studying. <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-emerald-600">Start Playing.</span>
-               </h2>
-            </ScrollReveal>
-
-            <div className="grid md:grid-cols-2 gap-8 md:gap-16">
-               {/* Old Way */}
-               <ScrollReveal className="bg-black p-8 md:p-12 rounded-3xl border border-white/5 opacity-80 hover:opacity-100 transition-opacity">
-                  <div className="flex items-center gap-4 mb-8">
-                     <div className="p-3 bg-red-500/10 rounded-xl text-red-500"><XCircle size={32} /></div>
-                     <h3 className="text-2xl font-bold text-gray-400">The Boring Way</h3>
-                  </div>
-                  <ul className="space-y-6">
-                     <li className="flex gap-4 items-start text-gray-500">
-                        <X size={20} className="shrink-0 mt-1 text-red-900" />
-                        <span>Reading 50-page PDFs until you fall asleep.</span>
-                     </li>
-                     <li className="flex gap-4 items-start text-gray-500">
-                        <X size={20} className="shrink-0 mt-1 text-red-900" />
-                        <span>Highlighting text blindly with no retention.</span>
-                     </li>
-                     <li className="flex gap-4 items-start text-gray-500">
-                        <X size={20} className="shrink-0 mt-1 text-red-900" />
-                        <span>Cramming 12 hours before the exam.</span>
-                     </li>
-                     <li className="flex gap-4 items-start text-gray-500">
-                        <X size={20} className="shrink-0 mt-1 text-red-900" />
-                        <span>Generic examples you can't relate to.</span>
-                     </li>
-                  </ul>
-               </ScrollReveal>
-
-               {/* Synapse Way */}
-               <ScrollReveal delay={200} className="bg-black p-8 md:p-12 rounded-3xl border-2 border-primary-500/30 shadow-[0_0_50px_-12px_rgba(34,197,94,0.2)] relative overflow-hidden">
-                  <div className="absolute top-0 right-0 w-32 h-32 bg-primary-500/20 blur-[50px] rounded-full"></div>
-                  
-                  <div className="flex items-center gap-4 mb-8 relative z-10">
-                     <div className="p-3 bg-primary-500/20 rounded-xl text-primary-400"><Gamepad2 size={32} /></div>
-                     <h3 className="text-2xl font-black text-white">The Synapse Way</h3>
-                  </div>
-                  <ul className="space-y-6 relative z-10">
-                     <li className="flex gap-4 items-start text-white text-lg font-medium">
-                        <CheckCircle2 size={24} className="shrink-0 mt-0.5 text-primary-500" />
-                        <span>Uploaded notes turn into bite-sized levels.</span>
-                     </li>
-                     <li className="flex gap-4 items-start text-white text-lg font-medium">
-                        <CheckCircle2 size={24} className="shrink-0 mt-0.5 text-primary-500" />
-                        <span>Instant quizzes with XP rewards.</span>
-                     </li>
-                     <li className="flex gap-4 items-start text-white text-lg font-medium">
-                        <CheckCircle2 size={24} className="shrink-0 mt-0.5 text-primary-500" />
-                        <span>Study 15 mins/day to keep your streak alive.</span>
-                     </li>
-                     <li className="flex gap-4 items-start text-white text-lg font-medium">
-                        <CheckCircle2 size={24} className="shrink-0 mt-0.5 text-primary-500" />
-                        <span>Analogies based on Anime, Sports, or Music.</span>
-                     </li>
-                  </ul>
-               </ScrollReveal>
-            </div>
-         </div>
-      </section>
-
-      {/* --- FEATURES (Gamification) --- */}
-      <section id="leagues" className="py-32 px-6 bg-black">
-         <div className="max-w-7xl mx-auto">
-            <ScrollReveal>
-               <h2 className="text-4xl md:text-6xl font-black mb-16 text-center">Engineered for <span className="text-primary-500">Obsession</span></h2>
-            </ScrollReveal>
-            
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[minmax(300px,auto)]">
-               
-               {/* 1. Streaks */}
-               <ScrollReveal className="spotlight-card md:col-span-1 rounded-3xl bg-surface-50 border border-white/10 relative overflow-hidden group p-8 flex flex-col items-center text-center">
-                  <div className="w-24 h-24 bg-orange-500/20 rounded-full flex items-center justify-center mb-6 shadow-[0_0_30px_rgba(249,115,22,0.3)]">
-                     <Flame className="text-orange-500 fill-current animate-pulse-slow" size={48} />
-                  </div>
-                  <h3 className="text-2xl font-black text-white mb-2">Build a Streak</h3>
-                  <p className="text-gray-400">
-                     Consistency is key. Study every day to keep your fire burning. Don't let it go out!
-                  </p>
-               </ScrollReveal>
-
-               {/* 2. Leagues */}
-               <ScrollReveal delay={100} className="spotlight-card md:col-span-1 rounded-3xl bg-surface-50 border border-white/10 relative overflow-hidden group p-8 flex flex-col items-center text-center">
-                  <div className="w-24 h-24 bg-yellow-500/20 rounded-full flex items-center justify-center mb-6 shadow-[0_0_30px_rgba(234,179,8,0.3)]">
-                     <Trophy className="text-yellow-400 fill-current animate-float" size={48} />
-                  </div>
-                  <h3 className="text-2xl font-black text-white mb-2">Climb the Leagues</h3>
-                  <p className="text-gray-400">
-                     Earn XP to promote from Bronze to Diamond league. Compete against students worldwide.
-                  </p>
-               </ScrollReveal>
-
-               {/* 3. Vibe Mode */}
-               <ScrollReveal delay={200} className="spotlight-card md:col-span-1 rounded-3xl bg-surface-50 border border-white/10 relative overflow-hidden group p-8 flex flex-col items-center text-center">
-                  <div className="w-24 h-24 bg-purple-500/20 rounded-full flex items-center justify-center mb-6 shadow-[0_0_30px_rgba(168,85,247,0.3)]">
-                     <Sparkles className="text-purple-400 fill-current animate-spin-slow" size={48} />
-                  </div>
-                  <h3 className="text-2xl font-black text-white mb-2">Vibe Mode</h3>
-                  <p className="text-gray-400">
-                     AI translates boring notes into metaphors you actually get. Physics explained via Football? Yes.
-                  </p>
-               </ScrollReveal>
-            </div>
-         </div>
-      </section>
-
-      {/* --- COMMUNITY --- */}
-      <section id="reviews" className="py-24 border-y border-white/5 bg-surface-50 overflow-hidden relative">
-         <div className="max-w-7xl mx-auto px-6 mb-12 text-center">
-            <h2 className="text-3xl font-bold">Join 10,000+ Students</h2>
-         </div>
-         <div className="flex w-[200%] animate-marquee">
-             {[...Array(2)].map((_, i) => (
-                <div key={i} className="flex gap-8 px-4">
-                   {[
-                      { text: "I actually look forward to studying now. It's weird.", user: "Alex, Med Student" },
-                      { text: "My streak is at 45 days. I can't stop.", user: "Priya, Law Major" },
-                      { text: "Finally a leaderboard that feels fair.", user: "Marcus, High School Senior" },
-                      { text: "My screen time is now 80% Synapse.", user: "Sarah, Comp Sci" },
-                      { text: "The Vibe Mode is literally magic.", user: "Chen, Self-Taught Dev" },
-                      { text: "Turned my lecture notes into a game.", user: "Jordan, History Buff" }
-                   ].map((t, j) => (
-                      <div key={j} className="w-[350px] bg-black p-6 rounded-2xl border border-white/5 flex flex-col justify-between shrink-0 hover:border-primary-500/30 transition-colors">
-                         <div className="flex gap-1 mb-4 text-yellow-500">
-                             {[1,2,3,4,5].map(k => <Star key={k} size={16} fill="currentColor"/>)}
-                         </div>
-                         <p className="text-lg font-medium text-gray-200 mb-4">"{t.text}"</p>
-                         <div className="flex items-center gap-3">
-                            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-gray-700 to-gray-600"></div>
-                            <div className="text-sm text-gray-400 font-bold">{t.user}</div>
-                         </div>
-                      </div>
-                   ))}
-                </div>
-             ))}
          </div>
       </section>
 
@@ -513,7 +380,6 @@ const Landing: React.FC<LandingProps> = ({ navigate, installPwa, supportsPWA }) 
             >
                Get Started
             </button>
-            <p className="mt-6 text-sm text-gray-600 font-bold uppercase tracking-widest">No Ads • No Hidden Fees</p>
          </ScrollReveal>
       </section>
 
