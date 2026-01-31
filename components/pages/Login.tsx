@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useApp } from '../store/AppContext';
 import { AppRoute } from '../types';
-import { Activity, ArrowRight, Lock, Mail } from 'lucide-react';
+import { Activity, ArrowRight, Lock, Mail, Zap, Brain } from 'lucide-react';
 
 interface LoginProps {
   navigate: (route: string) => void;
@@ -112,19 +112,36 @@ const Login: React.FC<LoginProps> = ({ navigate }) => {
          <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-emerald-600/10 rounded-full blur-[100px]"></div>
          <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20"></div>
          
-         {/* Content */}
-         <div className="relative z-10 max-w-lg text-white space-y-6">
-            <div className="w-16 h-16 bg-white/5 backdrop-blur-md rounded-2xl flex items-center justify-center border border-white/10 mb-8">
-               <Activity size={32} className="text-primary-400" />
+         {/* Content - Removed Fake Reviews, Focused on Mission */}
+         <div className="relative z-10 max-w-lg text-white space-y-8">
+            <div className="flex gap-4">
+              <div className="w-16 h-16 bg-white/5 backdrop-blur-md rounded-2xl flex items-center justify-center border border-white/10">
+                <Brain size={32} className="text-primary-400" />
+              </div>
+               <div className="w-16 h-16 bg-white/5 backdrop-blur-md rounded-2xl flex items-center justify-center border border-white/10">
+                <Zap size={32} className="text-yellow-400" />
+              </div>
             </div>
-            <h2 className="text-4xl font-bold leading-tight font-sans tracking-tight">
-               "Synapse turned my worst subject into my favorite hobby."
+            
+            <h2 className="text-5xl font-bold leading-tight font-sans tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400">
+               Turn academic chaos into <br/>
+               <span className="text-primary-400">structured mastery.</span>
             </h2>
-            <div className="flex items-center gap-4">
-               <div className="w-10 h-10 rounded-full bg-gradient-to-br from-green-400 to-emerald-500"></div>
-               <div>
-                  <p className="font-bold">Sarah Jenkins</p>
-                  <p className="text-sm text-gray-500">Computer Science Student, MIT</p>
+            
+            <div className="space-y-4">
+               <div className="flex items-start gap-4 p-4 rounded-xl bg-white/5 border border-white/5">
+                   <div className="w-2 h-2 mt-2 rounded-full bg-primary-500"></div>
+                   <div>
+                      <h4 className="font-bold text-white">Adaptive Intelligence</h4>
+                      <p className="text-sm text-gray-400">Our AURA engine customizes every lesson to your personal interests.</p>
+                   </div>
+               </div>
+               <div className="flex items-start gap-4 p-4 rounded-xl bg-white/5 border border-white/5">
+                   <div className="w-2 h-2 mt-2 rounded-full bg-blue-500"></div>
+                   <div>
+                      <h4 className="font-bold text-white">Gamified Progression</h4>
+                      <p className="text-sm text-gray-400">Earn XP, maintain streaks, and visualize your intellectual growth.</p>
+                   </div>
                </div>
             </div>
          </div>

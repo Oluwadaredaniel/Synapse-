@@ -113,6 +113,8 @@ export enum AppRoute {
   PROFILE = '/profile',
   SETTINGS = '/settings',
   PRIVACY = '/privacy',
+  TERMS = '/terms',
+  MISSION = '/mission',
   HOW_IT_WORKS = '/how-it-works',
   AURA_ENGINE = '/aura',
   ADMIN_DASHBOARD = '/admin/dashboard',

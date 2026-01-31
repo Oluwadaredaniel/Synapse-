@@ -7,28 +7,30 @@ import { Loader2, Menu } from 'lucide-react';
 // Components
 import Sidebar from './components/Sidebar';
 import BottomNav from './components/BottomNav';
-import InstallBanner from './components/InstallBanner'; // Added
+import InstallBanner from './components/InstallBanner';
 
 // Pages
-import Landing from './pages/Landing';
-import PwaLanding from './pages/PwaLanding';
-import Login from './pages/Login';
-import Signup from './pages/Signup';
-import ForgotPassword from './pages/ForgotPassword';
-import ResetPassword from './pages/ResetPassword';
-import Dashboard from './pages/Dashboard';
-import Upload from './pages/Upload';
-import Learning from './pages/Learning';
-import Quiz from './pages/Quiz';
-import Exam from './pages/Exam';
-import Achievements from './pages/Achievements';
-import Leaderboard from './pages/Leaderboard';
-import Profile from './pages/Profile';
-import Settings from './pages/Settings';
-import Privacy from './pages/Privacy';
-import HowItWorks from './pages/HowItWorks';
-import AuraEngine from './pages/AuraEngine';
-import AdminDashboard from './pages/AdminDashboard';
+import Landing from './components/pages/Landing';
+import PwaLanding from './components/pages/PwaLanding';
+import Login from './components/pages/Login';
+import Signup from './components/pages/Signup';
+import ForgotPassword from './components/pages/ForgotPassword';
+import ResetPassword from './components/pages/ResetPassword';
+import Dashboard from './components/pages/Dashboard';
+import Upload from './components/pages/Upload';
+import Learning from './components/pages/Learning';
+import Quiz from './components/pages/Quiz';
+import Exam from './components/pages/Exam';
+import Achievements from './components/pages/Achievements';
+import Leaderboard from './components/pages/Leaderboard';
+import Profile from './components/pages/Profile';
+import Settings from './components/pages/Settings';
+import Privacy from './components/pages/Privacy';
+import Terms from './components/pages/Terms';
+import Mission from './components/pages/Mission';
+import HowItWorks from './components/pages/HowItWorks';
+import AuraEngine from './components/pages/AuraEngine';
+import AdminDashboard from './components/pages/AdminDashboard';
 
 const AppContent: React.FC = () => {
   const { user, isLoading } = useApp();
@@ -58,7 +60,10 @@ const AppContent: React.FC = () => {
     } 
     // If just checking the site on web and not logged in, stick to LANDING
     else if (!user && !isStandalone && currentRoute !== AppRoute.LOGIN && currentRoute !== AppRoute.SIGNUP && currentRoute !== AppRoute.FORGOT_PASSWORD && currentRoute !== AppRoute.RESET_PASSWORD) {
-      setCurrentRoute(AppRoute.LANDING);
+      // Allow public access to info pages
+      if (![AppRoute.HOW_IT_WORKS, AppRoute.AURA_ENGINE, AppRoute.MISSION, AppRoute.PRIVACY, AppRoute.TERMS].includes(currentRoute)) {
+        setCurrentRoute(AppRoute.LANDING);
+      }
     }
   }, [user, isStandalone, isLoading]);
 
@@ -73,14 +78,11 @@ const AppContent: React.FC = () => {
       }
 
       // 2. Convenience Redirect: Logged-in users shouldn't see Landing/Login/Signup/Forgot
-      if ([AppRoute.LANDING, AppRoute.LOGIN, AppRoute.PWA_LANDING, AppRoute.SIGNUP, AppRoute.FORGOT_PASSWORD, AppRoute.HOW_IT_WORKS, AppRoute.AURA_ENGINE].includes(currentRoute)) {
+      if ([AppRoute.LANDING, AppRoute.LOGIN, AppRoute.PWA_LANDING, AppRoute.SIGNUP, AppRoute.FORGOT_PASSWORD].includes(currentRoute)) {
         if (user.role === 'admin') {
           setCurrentRoute(AppRoute.ADMIN_DASHBOARD);
         } else {
-          // Allow access to info pages even if logged in? Usually apps redirect to dashboard.
-          if ([AppRoute.LANDING, AppRoute.LOGIN, AppRoute.SIGNUP, AppRoute.FORGOT_PASSWORD].includes(currentRoute)) {
-             setCurrentRoute(AppRoute.DASHBOARD);
-          }
+           setCurrentRoute(AppRoute.DASHBOARD);
         }
       }
     }
@@ -129,6 +131,10 @@ const AppContent: React.FC = () => {
         return <HowItWorks navigate={navigate} />;
       case AppRoute.AURA_ENGINE:
         return <AuraEngine navigate={navigate} />;
+      case AppRoute.MISSION:
+        return <Mission navigate={navigate} />;
+      case AppRoute.TERMS:
+        return <Terms navigate={navigate} />;
       case AppRoute.DASHBOARD:
         return <Dashboard navigate={navigate} />;
       case AppRoute.UPLOAD:
@@ -165,7 +171,10 @@ const AppContent: React.FC = () => {
     AppRoute.RESET_PASSWORD,
     AppRoute.PWA_LANDING,
     AppRoute.HOW_IT_WORKS,
-    AppRoute.AURA_ENGINE
+    AppRoute.AURA_ENGINE,
+    AppRoute.MISSION,
+    AppRoute.TERMS,
+    AppRoute.PRIVACY // Usually full screen for privacy policy
   ].includes(currentRoute);
 
   const isAdminRoute = currentRoute.startsWith('/admin');

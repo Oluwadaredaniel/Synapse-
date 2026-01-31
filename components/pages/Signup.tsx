@@ -306,8 +306,8 @@ const Signup: React.FC<SignupProps> = ({ navigate }) => {
                        <Globe size={20} />
                     </div>
                     <div>
-                       <p className="text-white font-bold">Global Leaderboard</p>
-                       <p className="text-gray-400 text-xs">Compete with Harvard & Oxford</p>
+                       <p className="text-white font-bold">Global Community</p>
+                       <p className="text-gray-400 text-xs">Connect with learners worldwide</p>
                     </div>
                  </div>
                  <div className="h-2 bg-gray-800 rounded-full overflow-hidden">

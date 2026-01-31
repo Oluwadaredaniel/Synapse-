@@ -40,7 +40,7 @@ const slides = [
     accent: 'text-green-400',
     icon: <Trophy size={80} className="text-green-400 animate-float" />,
     title: "Global Leagues",
-    desc: "Compete with students from Harvard, Oxford, and UNILAG. Prove your mastery on the world stage.",
+    desc: "Compete with students from top universities around the world. Prove your mastery on the global stage.",
     cta: "I'm Ready"
   }
 ];
